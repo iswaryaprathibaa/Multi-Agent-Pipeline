@@ -1,0 +1,14 @@
+Vector databases store high-dimensional embeddings and support approximate nearest-neighbor
+search, which is the retrieval mechanism most RAG systems rely on. Popular options include
+Chroma, Pinecone, Weaviate, Qdrant, and pgvector (a Postgres extension). Chroma is notable for
+being lightweight, embeddable directly inside a Python application with no separate server
+required, and easy to run locally for prototyping before moving to a managed or clustered
+deployment for production scale.
+
+Key design considerations for a vector database used in enterprise search include: how it
+handles metadata filtering (e.g. restricting search to documents a given user is permitted to
+see), how embeddings are updated when source documents change, and how retrieval latency scales
+as the collection grows into the millions of vectors. Hybrid search, which combines vector
+similarity with traditional keyword (BM25) search, often improves precision over pure vector
+search for enterprise document collections that contain exact identifiers, product codes, or
+acronyms that embeddings alone may not distinguish well.

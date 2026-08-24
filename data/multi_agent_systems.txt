@@ -1,0 +1,18 @@
+Multi-agent LLM systems decompose a complex task into specialized roles, each handled by an
+agent with its own prompt, tools, and responsibility, rather than asking a single model to do
+everything in one pass. Common patterns include a researcher/writer/editor pipeline for content
+generation, a planner/executor/critic loop for task automation, and debate-style setups where
+multiple agents argue different positions before a judge agent decides.
+
+Frameworks like LangGraph model this as a directed graph of nodes, where each node is an agent
+or function and edges define control flow, including conditional edges that route execution
+based on the current state -- for example, sending a draft back to a writer agent when a
+validator or critic agent flags quality issues, forming a revise-and-check loop that terminates
+once quality gates pass or a maximum number of iterations is reached.
+
+Observability is a common pain point in multi-agent systems because a single user request can
+trigger many nested LLM calls across several agents. Tracing platforms such as LangSmith attach
+to each call automatically when the underlying LLM client is instrumented, recording the full
+call tree, token usage, latency, and intermediate outputs for every agent invocation, which
+makes it possible to debug why a particular agent produced a given output and to evaluate
+pipeline quality over time.
