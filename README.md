@@ -151,10 +151,18 @@ A `Dockerfile` and `render.yaml` are included.
    URL (e.g. `https://your-app.vercel.app`) once you know it — wildcard `*` works for testing.
 5. Note the backend's public URL (e.g. `https://multi-agent-pipeline-api.onrender.com`).
 
+`render.yaml` deploys on Render's **free tier** with no persistent disk, so the ChromaDB
+collection resets on every restart/redeploy — the backend just re-ingests `data/` again on
+the next request when it finds the collection empty (see `server/main.py`'s `/run` handler),
+which is instant for the bundled sample docs. If you outgrow that (e.g. a large custom
+knowledge base you don't want to re-ingest constantly), add a `disk:` block back to
+`render.yaml` and move to Render's paid Starter tier, which supports persistent disks.
+
 **Fly.io / Railway / any Docker host:** build the root `Dockerfile` and set the same env vars
 from `.env.example` (`OPENAI_API_KEY`, `LANGSMITH_API_KEY`, `LANGSMITH_PROJECT`,
-`ALLOWED_ORIGINS`, optionally `SERVER_API_KEY`). Mount a persistent volume at
-`CHROMA_PERSIST_DIR` (default `/app/chroma_db`) so the knowledge base survives redeploys.
+`ALLOWED_ORIGINS`, optionally `SERVER_API_KEY`). Optionally mount a persistent volume at
+`CHROMA_PERSIST_DIR` (default `/app/chroma_db`) if you want the knowledge base to survive
+redeploys instead of re-ingesting `data/` each time.
 
 **Run it locally** (from the repo root, so `src`/`server` imports resolve):
 ```bash

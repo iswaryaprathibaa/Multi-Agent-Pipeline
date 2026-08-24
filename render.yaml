@@ -2,6 +2,7 @@ services:
   - type: web
     name: multi-agent-pipeline-api
     env: docker
+    plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: /health
     envVars:
@@ -27,7 +28,3 @@ services:
         value: https://your-app.vercel.app
       - key: SERVER_API_KEY
         sync: false
-    disk:
-      name: chroma-data
-      mountPath: /app/chroma_db
-      sizeGB: 1
